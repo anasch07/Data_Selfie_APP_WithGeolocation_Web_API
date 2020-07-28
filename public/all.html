@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        p{
+            background-color: rgb(123, 190, 149);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Data Selfie App</h1>
+<p><a href="index.html">Enter</a> | <a href="all.html">list</a></p>
+    <script>
+        //I want to make a get request to a route on the server
+        //And have that route return all data from the database
+        getData();
+        async function getData() {
+            const response = await fetch('/api');
+            const data = await response.json();
+
+            for (item of data) {
+                const root = document.createElement('p');
+                const mood = document.createElement('div');
+                const geo = document.createElement('div');
+                const date = document.createElement('div');
+                const image=document.createElement('img');
+                root.append(mood, geo, date,image);
+                //Use textContent to be safe , cause when u use innerhtml , the user input can be executed
+
+
+                //!!! 
+                //USE backtick character (`) not ' for more info:
+                // https: //medium.com/better-programming/javascript-how-backticks-work-de269e0fb8ba
+
+                // EXAMPLE
+                /*
+                "Old syntax"
+                const userInfo = 'User info: ' + name + ' ' + surname + ' ' + telephone;
+                 "New syntax"
+                const userInfo = `User info: ${name} ${surname} ${telephone}`;
+                */
+                
+                mood.textContent = `mood: ${item.mood}`;
+                geo.textContent = `${item.lat}°, ${item.lat}°`;
+                const dateString = new Date(item.timestamp).toLocaleString();
+                date.textContent = dateString;
+                image.src=item.image64;
+
+                document.body.append(root);
+            }
+            
+
+            console.log(data);
+        }
+    </script>
+</body>
+
+</html>
